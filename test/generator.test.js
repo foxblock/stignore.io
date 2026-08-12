@@ -1,57 +1,45 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { createIgnoreBlocks, IGNORE_BLOCKS } from "../public/js/blocks.js";
+import { IGNORE_BLOCKS } from "../public/js/blocks.js";
 import {
   generateIgnoreFile,
   normalizePatternIds,
 } from "../public/js/generator.js";
 
-test("test_catalog_has_valid_frozen_blocks", () => {
+test("test_catalog_is_valid", () => {
+  assert.ok(Array.isArray(IGNORE_BLOCKS));
   assert.equal(IGNORE_BLOCKS.length, 5);
-  assert.equal(new Set(IGNORE_BLOCKS.map((block) => block.id)).size, 5);
-  assert.ok(Object.isFrozen(IGNORE_BLOCKS));
-  for (const block of IGNORE_BLOCKS) {
-    assert.ok(Object.isFrozen(block));
+  const ids = new Set();
+
+  for (const [blockIndex, block] of IGNORE_BLOCKS.entries()) {
+    assert.equal(
+      typeof block,
+      "object",
+      `Block ${blockIndex} must be an object.`,
+    );
     assert.match(block.id, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+    assert.equal(ids.has(block.id), false, `Duplicate block ID: ${block.id}`);
+    assert.equal(block.id, block.id.trim());
+    assert.equal(typeof block.name, "string");
+    assert.notEqual(block.name.trim(), "");
+    assert.equal(block.name, block.name.trim());
+    assert.equal(typeof block.title, "string");
     assert.ok(block.title.startsWith("//"));
+    assert.equal(block.title, block.title.trim());
+    assert.equal(typeof block.patterns, "string");
+    assert.notEqual(block.patterns, "");
     assert.equal(block.patterns.includes("\r"), false);
+    assert.equal(block.patterns, block.patterns.trimEnd());
+    for (const line of block.patterns.split("\n")) {
+      assert.equal(
+        line,
+        line.trimEnd(),
+        `Trailing whitespace in block: ${block.id}`,
+      );
+    }
+    ids.add(block.id);
   }
-});
-
-test("test_catalog_rejects_invalid_and_duplicate_ids", () => {
-  const validBlock = {
-    id: "valid",
-    name: "Valid",
-    title: "// Valid",
-    patterns: "*.tmp",
-  };
-
-  assert.throws(
-    () => createIgnoreBlocks([{ ...validBlock, id: "Not Valid" }]),
-    /invalid id/,
-  );
-  assert.throws(
-    () => createIgnoreBlocks([validBlock, validBlock]),
-    /duplicate id/,
-  );
-  assert.throws(
-    () => createIgnoreBlocks([{ ...validBlock, title: "Not a comment" }]),
-    /must start with/,
-  );
-});
-
-test("test_catalog_normalizes_multiline_patterns", () => {
-  const [block] = createIgnoreBlocks([
-    {
-      id: "sample",
-      name: "Sample",
-      title: "// Sample",
-      patterns: "one  \r\ntwo\r\n\r\n",
-    },
-  ]);
-
-  assert.equal(block.patterns, "one\ntwo");
 });
 
 test("test_normalize_pattern_ids_preserves_order_and_removes_duplicates", () => {
@@ -109,4 +97,3 @@ test("test_generate_empty_input_returns_empty_text", () => {
     unknownIds: [],
   });
 });
-

@@ -41,7 +41,7 @@ export function generateIgnoreFile(input, blocks = IGNORE_BLOCKS) {
   }
 
   const sections = selectedBlocks.map(
-    (block) => `${block.title}\n${block.patterns.replace(/\r\n?/g, "\n").trimEnd()}`,
+    (block) => `${block.title}\n${block.patterns}`,
   );
   if (unknownIds.length > 0) {
     sections.unshift(
@@ -57,4 +57,3 @@ export function generateIgnoreFile(input, blocks = IGNORE_BLOCKS) {
     unknownIds,
   };
 }
-

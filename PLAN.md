@@ -55,13 +55,13 @@ Export one ordered `IGNORE_BLOCKS` array. Each entry has:
 }
 ```
 
-Validate catalog once at module initialization:
+Validate catalog in unit tests run by local builds and CI. Runtime module exports plain catalog data without validation or normalization:
 
 - IDs are unique, lowercase ASCII slugs matching `[a-z0-9-]+`.
 - `name`, `title`, and `patterns` are non-empty strings.
 - Titles begin with `//`, making them valid Syncthing comments.
-- Patterns use LF internally; trailing whitespace and trailing blank lines are normalized by generator.
-- Validation throws with block index and offending field, causing tests and deployment verification to fail early.
+- Patterns use LF internally and contain no trailing whitespace or trailing blank lines.
+- Tests report block index or offending field, causing deployment verification to fail early.
 
 Starter catalog contains five reviewed blocks:
 

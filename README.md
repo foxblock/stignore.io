@@ -48,7 +48,7 @@ Edit `public/js/blocks.js`. Each entry contains:
 }
 ```
 
-IDs must be unique lowercase slugs. Titles must start with `//`. Multiline template literals keep patterns readable. Startup validation rejects malformed entries before deployment.
+IDs must be unique lowercase slugs. Titles must start with `//`. Multiline template literals keep patterns readable. Build tests reject malformed entries before deployment; page loads use catalog directly.
 
 ## Local development
 
