@@ -1,4 +1,4 @@
-# sync-ignore.io
+# stignore.io
 
 Generate modular [Syncthing `.stignore`](https://docs.syncthing.net/users/ignoring.html) files in browser or through a real plain-text API.
 
@@ -87,7 +87,7 @@ GitHub Actions owns production deployment. Local Cloudflare login is not require
 5. Restrict environment deployment branches to `main`. Do not add required reviewer if deployment must remain automatic.
 6. Add environment secret `CLOUDFLARE_API_TOKEN`.
 7. Add environment variable `CLOUDFLARE_ACCOUNT_ID`.
-8. Add environment variable `SITE_URL`, initially `https://sync-ignore-io.<account-subdomain>.workers.dev` using exact URL shown by Cloudflare.
+8. Add environment variable `SITE_URL`, initially `https://stignore-io.<account-subdomain>.workers.dev` using exact URL shown by Cloudflare.
 9. Push protected `main` branch or run **CI and Deploy** manually while viewing `main`.
 
 Workflow verifies tests and deployment bundle first, deploys exact verified commit, then smoke-tests live homepage and API. Pull requests never receive Cloudflare credential and never deploy.

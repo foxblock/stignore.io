@@ -56,7 +56,7 @@ test("test_normalize_pattern_ids_preserves_order_and_removes_duplicates", () => 
 });
 
 test("test_generate_single_block_with_final_lf", () => {
-  const sourceUrl = "https://sync-ignore.example/api?patterns=windows";
+  const sourceUrl = "https://stignore.example/api?patterns=windows";
   const result = generateIgnoreFile("windows", sourceUrl);
 
   assert.deepEqual(result.selectedIds, ["windows"]);
@@ -71,7 +71,7 @@ test("test_generate_single_block_with_final_lf", () => {
 test("test_generate_multiple_blocks_preserves_request_order", () => {
   const result = generateIgnoreFile(
     "unity,windows,unity",
-    "https://sync-ignore.example/api?patterns=unity,windows,unity",
+    "https://stignore.example/api?patterns=unity,windows,unity",
   );
   const unityIndex = result.text.indexOf("//---Unity");
   const windowsIndex = result.text.indexOf("//---Windows");
@@ -82,7 +82,7 @@ test("test_generate_multiple_blocks_preserves_request_order", () => {
 
 test("test_generate_skips_unknown_ids_with_warning", () => {
   const sourceUrl =
-    "https://sync-ignore.example/api?patterns=missing,macos,other";
+    "https://stignore.example/api?patterns=missing,macos,other";
   const result = generateIgnoreFile("missing,macos,other", sourceUrl);
 
   assert.deepEqual(result.selectedIds, ["macos"]);
@@ -97,7 +97,7 @@ test("test_generate_skips_unknown_ids_with_warning", () => {
 });
 
 test("test_generate_empty_input_returns_empty_text", () => {
-  assert.deepEqual(generateIgnoreFile("", "https://sync-ignore.example/api"), {
+  assert.deepEqual(generateIgnoreFile("", "https://stignore.example/api"), {
     text: "",
     requestedIds: [],
     selectedIds: [],
