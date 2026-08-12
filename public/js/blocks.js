@@ -12,6 +12,13 @@ export const IGNORE_BLOCKS = [
 (?d)System Volume Information`,
   },
   {
+    id: "microsoft-office",
+    name: "Microsoft Office Temporary Files",
+    title: "//---Microsoft-Office---//",
+    patterns:
+`(?d)~$*`,
+  },
+  {
     id: "macos",
     name: "macOS Metadata Files",
     title: "//---macOS-Specific---//",
@@ -74,6 +81,18 @@ export const IGNORE_BLOCKS = [
 //(?d)/[Bb]uilds
 //(?d)/[Mm]emoryCaptures
 //(?d)/[Rr]ecordings`,
+  },
+  {
+    id: "godot",
+    name: "Godot Engine Generated Files",
+    title: "//---Godot-Engine-Generated---//",
+    patterns:
+`(?d).godot
+// Godot 3.x generated data
+(?d).import
+(?d).mono
+// Optional: generated translations; enable only when source CSV files sync
+//(?d)*.translation`,
   },
   {
     id: "unrealengine",
