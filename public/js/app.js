@@ -8,6 +8,7 @@ import {
 
 const elements = {
   apiLink: document.querySelector("#api-link"),
+  apiOrigin: document.querySelector("#api-origin"),
   blockCount: document.querySelector("#block-count"),
   copyButton: document.querySelector("#copy-button"),
   copyButtonLabel: document.querySelector("#copy-button-label"),
@@ -308,4 +309,5 @@ document.addEventListener("pointerdown", (event) => {
 elements.copyButton.addEventListener("click", copyOutput);
 window.addEventListener("popstate", () => restoreFromLocation());
 
+elements.apiOrigin.textContent = window.location.origin;
 restoreFromLocation({ replaceInvalid: true });
