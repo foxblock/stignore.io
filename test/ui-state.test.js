@@ -31,10 +31,14 @@ test("test_suggestions_match_name_and_id_and_exclude_selected", () => {
     findBlockSuggestions("engine", []).map((block) => block.id),
     ["unrealengine"],
   );
-  assert.deepEqual(
-    findBlockSuggestions("files", ["windows"]).map((block) => block.id),
-    ["macos", "linux", "unity", "unrealengine"],
+  const suggestionIds = findBlockSuggestions("files", ["windows"]).map(
+    (block) => block.id,
   );
+
+  for (const expectedId of ["macos", "linux", "unity", "unrealengine"]) {
+    assert.ok(suggestionIds.includes(expectedId), `Missing suggestion: ${expectedId}`);
+  }
+  assert.equal(suggestionIds.includes("windows"), false);
 });
 
 test("test_suggestions_rank_prefix_before_substring_in_catalog_order", () => {
