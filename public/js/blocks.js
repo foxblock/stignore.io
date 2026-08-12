@@ -90,4 +90,108 @@ export const IGNORE_BLOCKS = [
 //[Bb]inaries
 //[Ss]aved`,
   },
+  {
+    id: "version-control",
+    name: "Version Control",
+    title: "//---Version-control internals---//",
+    patterns:
+`// No (?d): repositories may contain unique, unpushed history.
+.git
+.svn
+.hg
+.jj
+.bzr
+_darcs
+.pijul
+.fslckout
+_FOSSIL_`,
+  },
+  {
+    id: "python",
+    name: "Python Temp Files",
+    title: "//---Python---//",
+    patterns:
+`(?d)__pycache__
+(?d).pytest_cache
+(?d).mypy_cache
+(?d).ruff_cache
+(?d).tox
+(?d).nox
+(?d).venv`,
+  },
+  {
+    id: "web",
+    name: "JavaScript and web tooling",
+    title: "//---JavaScript and web---//",
+    patterns:
+`(?d)node_modules
+(?d).pnpm-store
+(?d).parcel-cache
+(?d).turbo
+(?d).next
+(?d).nuxt
+(?d).svelte-kit
+(?d).vite`,
+  },
+  {
+    id: "node",
+    name: "Node and npm generated files",
+    title: "//---Node-Generated---//",
+    patterns:
+`(?d)node_modules
+package-lock.json`,
+  },
+  {
+    id: "cmake",
+    name: "CMake Cache",
+    title: "//---CMake Cache---//",
+    patterns:
+`(?d)CMakeFiles
+(?d)CMakeCache.txt
+(?d)cmake_install.cmake`,
+  },
+  {
+    id: "meson",
+    name: "Meson Temp Files",
+    title: "//---Meson-Specific---//",
+    patterns:
+`(?d)meson-private
+(?d)meson-logs
+(?d)meson-info`,
+  },
+  {
+    id: "ninja",
+    name: "Ninja Temp Files",
+    title: "//---Ninja-Specific---//",
+    patterns:
+`(?d).ninja_deps
+(?d).ninja_log`,
+  },
+  {
+    id: "pio",
+    name: "PlatformIO Generated Files",
+    title: "//---Ninja-Specific---//",
+    patterns:
+`(?d).pio
+(?d).pioenvs
+(?d).piolibdeps`,
+  },
+  {
+    id: "vs",
+    name: "VisualStudio Generated Files",
+    title: "//---VisualStudio-Specific---//",
+    patterns:
+`(?d).vs`,
+  },
+  {
+    id: "compiler",
+    name: "Compiler intermediates",
+    title: "//---Compiler-Generated-Files---//",
+    patterns:
+`(?d)(?i)*.{o,obj}
+(?d)*.class
+(?d)*.pyc
+(?d)*.pyo
+(?d)(?i)*.dSYM`,
+  },
 ];
