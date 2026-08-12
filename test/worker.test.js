@@ -1,0 +1,119 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import { handleRequest } from "../src/worker.js";
+
+function createEnvironment(responseText = "static asset") {
+  const requests = [];
+  return {
+    requests,
+    ASSETS: {
+      fetch(request) {
+        requests.push(request);
+        return new Response(responseText, {
+          headers: { "Content-Type": "text/html; charset=utf-8" },
+        });
+      },
+    },
+  };
+}
+
+test("test_api_generates_plain_text_stignore", async () => {
+  const request = new Request(
+    "https://sync-ignore.example/api?patterns=windows,unity",
+  );
+  const response = await handleRequest(request, createEnvironment());
+  const text = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("content-type"), "text/plain; charset=utf-8");
+  assert.equal(
+    response.headers.get("content-disposition"),
+    'inline; filename=".stignore"',
+  );
+  assert.equal(response.headers.get("access-control-allow-origin"), "*");
+  assert.equal(response.headers.get("x-content-type-options"), "nosniff");
+  assert.equal(response.headers.get("cache-control"), "public, max-age=300");
+  assert.ok(text.includes("//---Windows-Specific---//"));
+  assert.ok(text.includes("//---Unity-Generated---//"));
+});
+
+test("test_api_accepts_trailing_slash_and_warns_for_unknown_ids", async () => {
+  const request = new Request(
+    "https://sync-ignore.example/api/?patterns=missing,linux",
+  );
+  const response = await handleRequest(request, createEnvironment());
+  const text = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.ok(text.startsWith("// WARNING: Unknown block IDs skipped: missing\n\n"));
+  assert.ok(text.includes("//---Linux-Specific---//"));
+});
+
+test("test_api_rejects_missing_or_all_unknown_patterns", async () => {
+  const missingResponse = await handleRequest(
+    new Request("https://sync-ignore.example/api"),
+    createEnvironment(),
+  );
+  const unknownResponse = await handleRequest(
+    new Request("https://sync-ignore.example/api?patterns=missing,other"),
+    createEnvironment(),
+  );
+
+  assert.equal(missingResponse.status, 400);
+  assert.match(await missingResponse.text(), /Usage/);
+  assert.equal(missingResponse.headers.get("cache-control"), "no-store");
+  assert.equal(unknownResponse.status, 400);
+  assert.equal(
+    await unknownResponse.text(),
+    "No known block IDs requested: missing, other\n",
+  );
+});
+
+test("test_api_rejects_unsupported_method", async () => {
+  const response = await handleRequest(
+    new Request("https://sync-ignore.example/api?patterns=windows", {
+      method: "POST",
+    }),
+    createEnvironment(),
+  );
+
+  assert.equal(response.status, 405);
+  assert.equal(response.headers.get("allow"), "GET");
+  assert.equal(await response.text(), "Method not allowed. Use GET.\n");
+});
+
+test("test_api_rejects_nested_endpoint", async () => {
+  const response = await handleRequest(
+    new Request("https://sync-ignore.example/api/unknown?patterns=windows"),
+    createEnvironment(),
+  );
+
+  assert.equal(response.status, 404);
+  assert.equal(await response.text(), "API endpoint not found.\n");
+});
+
+test("test_non_api_request_delegates_to_static_assets", async () => {
+  const env = createEnvironment("homepage");
+  const request = new Request("https://sync-ignore.example/index.html");
+  const response = await handleRequest(request, env);
+
+  assert.equal(response.status, 200);
+  assert.equal(await response.text(), "homepage");
+  assert.deepEqual(env.requests, [request]);
+});
+
+test("test_api_hides_unexpected_generator_error", async () => {
+  const response = await handleRequest(
+    new Request("https://sync-ignore.example/api?patterns=windows"),
+    createEnvironment(),
+    () => {
+      throw new Error("sensitive internal detail");
+    },
+  );
+
+  assert.equal(response.status, 500);
+  assert.equal(await response.text(), "Internal server error.\n");
+  assert.equal(response.headers.get("cache-control"), "no-store");
+});
+
