@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b6b67">
+    <meta
+      name="description"
+      content="Build modular Syncthing .stignore files and fetch them from a plain-text API."
+    >
+    <title>sync-ignore.io — Build Syncthing ignore files</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script type="module" src="./js/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#generator">Skip to generator</a>
+
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="sync-ignore.io home">
+        <span class="brand-mark" aria-hidden="true">//</span>
+        <span>sync-ignore.io</span>
+      </a>
+      <nav class="header-links" aria-label="Reference links">
+        <a href="#api-usage">API</a>
+        <a
+          href="https://docs.syncthing.net/users/ignoring.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Syncthing docs</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="builder" id="generator" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Syncthing ignore builder</p>
+          <h1 id="page-title">Sync what matters.<br>Leave noise behind.</h1>
+          <p class="hero-description">
+            Combine reusable blocks into one clean <code>.stignore</code> file.
+            No uploads, accounts, or guesswork.
+          </p>
+        </div>
+
+        <div class="builder-card">
+          <div class="selection-panel">
+            <div class="field-heading">
+              <div>
+                <label id="block-label" for="block-input">Ignore blocks</label>
+                <p id="block-help">Search by block name or ID, then press Enter.</p>
+              </div>
+              <span class="block-count" id="block-count">0 selected</span>
+            </div>
+
+            <div class="combobox-wrap">
+              <div class="token-input" id="token-input">
+                <div class="selected-blocks" id="selected-blocks"></div>
+                <input
+                  id="block-input"
+                  type="text"
+                  role="combobox"
+                  aria-autocomplete="list"
+                  aria-expanded="false"
+                  aria-controls="block-suggestions"
+                  aria-labelledby="block-label"
+                  aria-describedby="block-help"
+                  autocomplete="off"
+                  autocapitalize="none"
+                  spellcheck="false"
+                  placeholder="Try Windows, macOS, Unity…"
+                >
+              </div>
+              <ul
+                class="suggestions"
+                id="block-suggestions"
+                role="listbox"
+                aria-label="Available ignore blocks"
+                hidden
+              ></ul>
+            </div>
+            <p class="sr-only" id="selection-status" aria-live="polite"></p>
+          </div>
+
+          <div class="output-panel" id="output-panel" aria-hidden="true" inert>
+            <div class="output-heading">
+              <div>
+                <label for="ignore-output">Your <code>.stignore</code></label>
+                <p>Ready for Syncthing folder root.</p>
+              </div>
+              <button class="copy-button" id="copy-button" type="button" disabled>
+                <span aria-hidden="true">⧉</span>
+                <span id="copy-button-label">Copy file</span>
+              </button>
+            </div>
+            <textarea
+              id="ignore-output"
+              readonly
+              spellcheck="false"
+              aria-describedby="output-details copy-status"
+            ></textarea>
+            <div class="output-details" id="output-details">
+              <span id="line-count">0 lines</span>
+              <a id="api-link" href="./api" target="_blank" rel="noopener">
+                Open plain-text API ↗
+              </a>
+            </div>
+            <p class="copy-status" id="copy-status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <noscript>
+          <p class="noscript-message">
+            JavaScript is required to combine blocks in browser. Plain-text API
+            remains available at <code>/api?patterns=windows</code>.
+          </p>
+        </noscript>
+      </section>
+
+      <section class="api-section" id="api-usage" aria-labelledby="api-title">
+        <div class="api-copy">
+          <p class="eyebrow">Script-friendly</p>
+          <h2 id="api-title">Same blocks. Real text response.</h2>
+          <p>
+            Use comma-separated block IDs from shell scripts, provisioning, or
+            any HTTP client. Response contains only valid <code>.stignore</code>
+            text.
+          </p>
+        </div>
+        <div class="terminal" aria-label="API command example">
+          <div class="terminal-bar" aria-hidden="true">
+            <span></span><span></span><span></span>
+            <strong>terminal</strong>
+          </div>
+          <pre><code><span class="prompt">$</span> curl -fsSL \
+  "https://sync-ignore.io/api?patterns=windows,unity" \
+  -o .stignore
+
+<span class="prompt">$</span> file .stignore
+.stignore: Unicode text, UTF-8 text</code></pre>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Built for quiet folders.</p>
+      <p>
+        Pattern behavior follows
+        <a
+          href="https://docs.syncthing.net/users/ignoring.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Syncthing documentation</a>.
+      </p>
+    </footer>
+  </body>
+</html>
