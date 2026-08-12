@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import { IGNORE_BLOCKS } from "../public/js/blocks.js";
 import { handleRequest } from "../src/worker.js";
 
 function createEnvironment(responseText = "static asset") {
@@ -58,6 +59,27 @@ test("test_api_accepts_trailing_slash_and_warns_for_unknown_ids", async () => {
     ),
   );
   assert.ok(text.includes("//---Linux-Specific---//"));
+});
+
+test("test_api_lists_available_block_ids", async () => {
+  for (const path of ["/api/list", "/api/list/"]) {
+    const response = await handleRequest(
+      new Request(`https://sync-ignore.example${path}`),
+      createEnvironment(),
+    );
+
+    assert.equal(response.status, 200);
+    assert.equal(
+      response.headers.get("content-type"),
+      "text/plain; charset=utf-8",
+    );
+    assert.equal(response.headers.get("access-control-allow-origin"), "*");
+    assert.equal(response.headers.get("cache-control"), "public, max-age=300");
+    assert.equal(
+      await response.text(),
+      `${IGNORE_BLOCKS.map((block) => block.id).join(",")}\n`,
+    );
+  }
 });
 
 test("test_api_rejects_missing_or_all_unknown_patterns", async () => {

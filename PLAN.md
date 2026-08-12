@@ -141,6 +141,8 @@ Accept both `/api` and `/api/`; canonical examples use `/api`:
 GET /api?patterns=windows,unity
 ```
 
+`GET /api/list` returns available block IDs as one comma-separated `text/plain` line in catalog order. `/api/list/` is also accepted.
+
 Successful response:
 
 ```http

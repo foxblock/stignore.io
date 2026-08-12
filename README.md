@@ -14,6 +14,14 @@ curl -fsSL \
   --output .stignore
 ```
 
+List available block IDs:
+
+```sh
+curl -fsSL "https://your-host.example/api/list"
+```
+
+Response is one comma-separated line in catalog order.
+
 Successful response uses `Content-Type: text/plain; charset=utf-8` and contains only `.stignore` content:
 
 ```text

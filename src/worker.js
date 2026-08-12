@@ -1,3 +1,4 @@
+import { IGNORE_BLOCKS } from "../public/js/blocks.js";
 import { generateIgnoreFile, normalizePatternIds } from "../public/js/generator.js";
 
 const API_HEADERS = Object.freeze({
@@ -25,13 +26,15 @@ export async function handleRequest(
 ) {
   const url = new URL(request.url);
   const isApiRoot = url.pathname === "/api" || url.pathname === "/api/";
-  const isApiPath = isApiRoot || url.pathname.startsWith("/api/");
+  const isApiList =
+    url.pathname === "/api/list" || url.pathname === "/api/list/";
+  const isApiPath = isApiRoot || isApiList || url.pathname.startsWith("/api/");
 
   if (!isApiPath) {
     return env.ASSETS.fetch(request);
   }
 
-  if (!isApiRoot) {
+  if (!isApiRoot && !isApiList) {
     return apiResponse("API endpoint not found.\n", 404, {
       "Cache-Control": "no-store",
     });
@@ -42,6 +45,14 @@ export async function handleRequest(
       Allow: "GET",
       "Cache-Control": "no-store",
     });
+  }
+
+  if (isApiList) {
+    return apiResponse(
+      `${IGNORE_BLOCKS.map((block) => block.id).join(",")}\n`,
+      200,
+      { "Cache-Control": "public, max-age=300" },
+    );
   }
 
   const rawPatterns = url.searchParams.get("patterns");
