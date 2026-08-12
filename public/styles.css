@@ -103,7 +103,7 @@ pre {
   align-items: center;
   justify-content: space-between;
   width: min(1180px, calc(100% - 2rem));
-  min-height: 72px;
+  min-height: 60px;
   margin: 0 auto;
   border-bottom: 1px solid rgb(83 103 104 / 22%);
 }
@@ -149,32 +149,41 @@ pre {
   color: var(--accent);
 }
 
+main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  align-content: center;
+  width: min(1000px, calc(100% - 2rem));
+  min-height: calc(100svh - 112px);
+  margin: 0 auto;
+}
+
 .builder {
   display: grid;
   align-content: center;
-  width: min(920px, calc(100% - 2rem));
-  min-height: calc(100svh - 72px);
-  margin: 0 auto;
-  padding: clamp(4rem, 11vh, 8rem) 0;
+  width: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0.75rem 0;
   transition: min-height 500ms cubic-bezier(0.22, 1, 0.36, 1),
     padding 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .has-selection .builder {
   min-height: auto;
-  padding-top: clamp(2.75rem, 6vh, 5rem);
-  padding-bottom: clamp(4rem, 8vh, 7rem);
+  padding-top: clamp(1.5rem, 4vh, 2.5rem);
 }
 
 .hero-copy {
   max-width: 730px;
-  margin: 0 auto clamp(2rem, 5vh, 3.5rem);
+  margin: 0 auto clamp(1.25rem, 3vh, 2rem);
   text-align: center;
   transition: margin 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .has-selection .hero-copy {
-  margin-bottom: clamp(1.5rem, 3vh, 2.25rem);
+  margin-bottom: clamp(1rem, 2vh, 1.5rem);
 }
 
 .eyebrow {
@@ -196,20 +205,21 @@ h2 {
 }
 
 h1 {
-  font-size: clamp(2.65rem, 7vw, 5.65rem);
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
 }
 
 h2 {
-  font-size: clamp(2rem, 4.5vw, 3.65rem);
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
 }
 
 .hero-description {
   max-width: 610px;
-  margin: 1.4rem auto 0;
+  margin: 0.75rem auto 0;
   color: var(--ink-muted);
-  font-size: clamp(1rem, 2vw, 1.16rem);
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
 }
 
+.hero-copy h1 code,
 .hero-description code,
 .output-heading code {
   color: var(--accent-strong);
@@ -229,7 +239,7 @@ h2 {
 .selection-panel {
   position: relative;
   z-index: 3;
-  padding: clamp(1.25rem, 3vw, 2rem);
+  padding: clamp(1rem, 2vw, 1.4rem);
 }
 
 .field-heading,
@@ -264,12 +274,12 @@ h2 {
 
 .combobox-wrap {
   position: relative;
-  margin-top: 0.9rem;
+  margin-top: 0.65rem;
 }
 
 .token-input {
   display: flex;
-  min-height: 58px;
+  min-height: 52px;
   gap: 0.48rem;
   align-items: center;
   flex-wrap: wrap;
@@ -505,21 +515,38 @@ h2 {
   font-size: 0.85rem;
 }
 
+.section-divider {
+  width: 100%;
+  height: 1px;
+  margin: 2rem 0 2.5rem;
+  background: var(--line);
+  border: 0;
+}
+
 .api-section {
   display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(420px, 1.2fr);
-  gap: clamp(2rem, 7vw, 7rem);
+  grid-template-columns: minmax(0, 0.75fr) minmax(520px, 1.25fr);
+  gap: 1.5rem;
   align-items: center;
-  width: min(1120px, calc(100% - 2rem));
-  margin: 0 auto;
-  padding: clamp(5rem, 11vw, 9rem) 0;
-  border-top: 1px solid var(--line);
+  width: 100%;
+  margin: 0;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--paper-raised) 88%, transparent);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.api-copy {
+  padding: 0.75rem 0.5rem;
 }
 
 .api-copy p:last-child {
   max-width: 34rem;
-  margin: 1.25rem 0 0;
+  margin: 0.75rem 0 0;
   color: var(--ink-muted);
+  font-size: 0.9rem;
 }
 
 .terminal {
@@ -562,7 +589,8 @@ h2 {
 .terminal pre {
   padding: clamp(1.1rem, 3vw, 1.65rem);
   margin: 0;
-  overflow-x: auto;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
   font-size: clamp(0.68rem, 1.5vw, 0.78rem);
   line-height: 1.75;
 }
@@ -574,9 +602,11 @@ h2 {
 
 .site-footer {
   display: flex;
+  min-height: 52px;
   justify-content: space-between;
+  align-items: center;
   width: min(1180px, calc(100% - 2rem));
-  padding: 1.35rem 0 2.25rem;
+  padding: 0.75rem 0;
   margin: 0 auto;
   color: var(--ink-muted);
   border-top: 1px solid var(--line);
@@ -611,18 +641,35 @@ h2 {
   text-decoration: none;
 }
 
-@media (max-width: 760px) {
-  .header-links a:first-child {
-    display: none;
+@media (max-width: 960px) {
+  main {
+    display: block;
+    width: 100%;
+    min-height: 0;
   }
 
   .builder {
+    width: min(920px, calc(100% - 2rem));
+    min-height: calc(100svh - 60px);
+    margin: 0 auto;
+  }
+
+  .api-section {
+    grid-template-columns: 1fr;
+    width: min(720px, calc(100% - 2rem));
+    margin: 0 auto 3rem;
+  }
+}
+
+@media (max-width: 760px) {
+  .builder {
     width: min(100% - 1.25rem, 920px);
-    padding-top: 3.75rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
   }
 
   h1 {
-    font-size: clamp(2.55rem, 14vw, 4rem);
+    font-size: clamp(2.15rem, 11vw, 3.25rem);
   }
 
   .field-heading,
@@ -648,7 +695,6 @@ h2 {
   }
 
   .api-section {
-    grid-template-columns: 1fr;
     width: min(100% - 1.25rem, 1120px);
   }
 
