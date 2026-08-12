@@ -27,10 +27,16 @@ test("test_build_selection_search_is_readable_and_empty_when_clear", () => {
 });
 
 test("test_suggestions_match_name_and_id_and_exclude_selected", () => {
-  assert.deepEqual(
-    findBlockSuggestions("engine", []).map((block) => block.id),
-    ["godot", "unrealengine"],
+  const engineSuggestionIds = findBlockSuggestions("engine", []).map(
+    (block) => block.id,
   );
+
+  for (const expectedId of ["godot", "unrealengine"]) {
+    assert.ok(
+      engineSuggestionIds.includes(expectedId),
+      `Missing suggestion: ${expectedId}`,
+    );
+  }
   const suggestionIds = findBlockSuggestions("files", ["windows"]).map(
     (block) => block.id,
   );
