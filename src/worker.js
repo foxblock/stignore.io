@@ -54,7 +54,7 @@ export async function handleRequest(
   }
 
   try {
-    const result = generate(rawPatterns);
+    const result = generate(rawPatterns, url.href);
     if (result.selectedIds.length === 0) {
       return apiResponse(
         `No known block IDs requested: ${result.unknownIds.join(", ")}\n`,
@@ -79,4 +79,3 @@ export default {
     return handleRequest(request, env);
   },
 };
-

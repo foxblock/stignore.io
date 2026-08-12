@@ -45,6 +45,14 @@ function writeHistory(mode = "push") {
   window.history[method]({ patterns: [...selectedIds] }, "", nextUrl);
 }
 
+// Build shareable page URL used as generated-file provenance.
+function buildGeneratorUrl() {
+  const url = new URL(window.location.href);
+  url.search = buildSelectionSearch(selectedIds);
+  url.hash = "";
+  return url.href;
+}
+
 // Render selected blocks as removable, keyboard-accessible chips.
 function renderSelectedBlocks() {
   elements.selectedBlocks.replaceChildren();
@@ -79,7 +87,7 @@ function renderSelectedBlocks() {
 
 // Regenerate output and transition layout when selection becomes non-empty.
 function renderOutput() {
-  const result = generateIgnoreFile(selectedIds);
+  const result = generateIgnoreFile(selectedIds, buildGeneratorUrl());
   const hasSelection = selectedIds.length > 0;
   const lineCount = result.text
     ? result.text.trimEnd().split("\n").length
