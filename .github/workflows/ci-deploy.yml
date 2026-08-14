@@ -86,16 +86,30 @@ jobs:
           api_body="$(mktemp)"
           api_headers="$(mktemp)"
 
-          curl --fail --silent --show-error \
+          curl --fail --location --silent --show-error \
             --retry 5 --retry-all-errors --retry-delay 3 \
             "$site_url/" --output "$home_body"
-          grep --fixed-strings --quiet "Sync what matters." "$home_body"
+          grep --fixed-strings --quiet \
+            'Build your <code>.stignore</code>' "$home_body" || {
+              echo "::error::Production UI is missing expected page heading"
+              exit 1
+            }
 
-          curl --fail --silent --show-error \
+          curl --fail --location --silent --show-error \
             --retry 5 --retry-all-errors --retry-delay 3 \
             --dump-header "$api_headers" \
             "$site_url/api?patterns=windows" --output "$api_body"
           grep --ignore-case --extended-regexp --quiet \
-            '^content-type: text/plain; charset=utf-8' "$api_headers"
-          grep --fixed-strings --quiet '//---Windows-Specific---//' "$api_body"
-          grep --fixed-strings --quiet '(?d)Thumbs.db' "$api_body"
+            '^content-type: text/plain; charset=utf-8' "$api_headers" || {
+              echo "::error::Production API returned unexpected content type"
+              exit 1
+            }
+          grep --fixed-strings --quiet \
+            '//---Windows-Specific---//' "$api_body" || {
+              echo "::error::Production API response is missing Windows section"
+              exit 1
+            }
+          grep --fixed-strings --quiet '(?d)Thumbs.db' "$api_body" || {
+              echo "::error::Production API response is missing Thumbs.db pattern"
+              exit 1
+            }
