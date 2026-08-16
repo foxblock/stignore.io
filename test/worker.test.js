@@ -81,10 +81,37 @@ test("test_api_lists_available_block_ids", async () => {
       "text/plain; charset=utf-8",
     );
     assert.equal(response.headers.get("access-control-allow-origin"), "*");
-    assert.equal(response.headers.get("cache-control"), "public, max-age=300");
+    assert.equal(
+      response.headers.get("cache-control"),
+      "public, max-age=86400",
+    );
     assert.equal(
       await response.text(),
       `${IGNORE_BLOCKS.map((block) => block.id).join(",")}\n`,
+    );
+  }
+});
+
+test("test_api_lists_available_blocks_as_json", async () => {
+  for (const path of ["/api/blocks", "/api/blocks/"]) {
+    const response = await handleRequest(
+      new Request(`https://stignore.example${path}`),
+      createEnvironment(),
+    );
+
+    assert.equal(response.status, 200);
+    assert.equal(
+      response.headers.get("content-type"),
+      "application/json; charset=utf-8",
+    );
+    assert.equal(response.headers.get("access-control-allow-origin"), "*");
+    assert.equal(
+      response.headers.get("cache-control"),
+      "public, max-age=86400",
+    );
+    assert.deepEqual(
+      await response.json(),
+      IGNORE_BLOCKS.map(({ id, name }) => ({ id, name })),
     );
   }
 });

@@ -28,13 +28,16 @@ export async function handleRequest(
   const isApiRoot = url.pathname === "/api" || url.pathname === "/api/";
   const isApiList =
     url.pathname === "/api/list" || url.pathname === "/api/list/";
-  const isApiPath = isApiRoot || isApiList || url.pathname.startsWith("/api/");
+  const isApiBlocks =
+    url.pathname === "/api/blocks" || url.pathname === "/api/blocks/";
+  const isApiPath =
+    isApiRoot || isApiList || isApiBlocks || url.pathname.startsWith("/api/");
 
   if (!isApiPath) {
     return env.ASSETS.fetch(request);
   }
 
-  if (!isApiRoot && !isApiList) {
+  if (!isApiRoot && !isApiList && !isApiBlocks) {
     return apiResponse("API endpoint not found.\n", 404, {
       "Cache-Control": "no-store",
     });
@@ -51,8 +54,16 @@ export async function handleRequest(
     return apiResponse(
       `${IGNORE_BLOCKS.map((block) => block.id).join(",")}\n`,
       200,
-      { "Cache-Control": "public, max-age=300" },
+      { "Cache-Control": "public, max-age=86400" },
     );
+  }
+
+  if (isApiBlocks) {
+    const blocks = IGNORE_BLOCKS.map(({ id, name }) => ({ id, name }));
+    return apiResponse(`${JSON.stringify(blocks)}\n`, 200, {
+      "Cache-Control": "public, max-age=86400",
+      "Content-Type": "application/json; charset=utf-8",
+    });
   }
 
   const rawPatterns = url.searchParams.get("patterns");
