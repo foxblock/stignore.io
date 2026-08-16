@@ -1,18 +1,23 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { IGNORE_BLOCKS } from "../public/js/blocks.js";
 import {
   buildSelectionSearch,
   findBlockSuggestions,
   parseSelection,
 } from "../public/js/ui-state.js";
 
+const TEST_BLOCKS = [
+  { id: "alpha", name: "Game Engine" },
+  { id: "engine-tools", name: "Builder" },
+  { id: "other", name: "Other Files" },
+];
+
 test("test_parse_selection_restores_known_ids_and_reports_unknown_ids", () => {
   assert.deepEqual(
-    parseSelection("?patterns=Unity,missing,windows,unity"),
+    parseSelection("?patterns=Alpha,missing,engine-tools,alpha", TEST_BLOCKS),
     {
-      selectedIds: ["unity", "windows"],
+      selectedIds: ["alpha", "engine-tools"],
       unknownIds: ["missing"],
     },
   );
@@ -27,24 +32,19 @@ test("test_build_selection_search_is_readable_and_empty_when_clear", () => {
 });
 
 test("test_suggestions_match_name_and_id_and_exclude_selected", () => {
-  const engineSuggestionIds = findBlockSuggestions("engine", []).map(
-    (block) => block.id,
-  );
+  const engineSuggestionIds = findBlockSuggestions(
+    "engine",
+    [],
+    TEST_BLOCKS,
+  ).map((block) => block.id);
 
-  for (const expectedId of ["godot", "unrealengine"]) {
-    assert.ok(
-      engineSuggestionIds.includes(expectedId),
-      `Missing suggestion: ${expectedId}`,
-    );
-  }
-  const suggestionIds = findBlockSuggestions("files", ["windows"]).map(
-    (block) => block.id,
+  assert.deepEqual(engineSuggestionIds, ["engine-tools", "alpha"]);
+  assert.deepEqual(
+    findBlockSuggestions("engine", ["alpha"], TEST_BLOCKS).map(
+      (block) => block.id,
+    ),
+    ["engine-tools"],
   );
-
-  for (const expectedId of ["macos", "linux", "unity", "unrealengine"]) {
-    assert.ok(suggestionIds.includes(expectedId), `Missing suggestion: ${expectedId}`);
-  }
-  assert.equal(suggestionIds.includes("windows"), false);
 });
 
 test("test_suggestions_rank_prefix_before_substring_in_catalog_order", () => {
@@ -62,9 +62,9 @@ test("test_suggestions_rank_prefix_before_substring_in_catalog_order", () => {
 
 test("test_empty_suggestion_query_returns_remaining_catalog_order", () => {
   assert.deepEqual(
-    findBlockSuggestions("", ["macos", "unity"]).map((block) => block.id),
-    IGNORE_BLOCKS.map((block) => block.id).filter(
-      (id) => id !== "macos" && id !== "unity",
+    findBlockSuggestions("", ["engine-tools"], TEST_BLOCKS).map(
+      (block) => block.id,
     ),
+    ["alpha", "other"],
   );
 });

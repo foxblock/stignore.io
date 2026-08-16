@@ -3,7 +3,7 @@ export const IGNORE_BLOCKS = [
   {
     id: "windows",
     name: "Windows Temp Files",
-    title: "//---Windows-Specific---//",
+    title: "//---Windows System/Temp Files---//",
     patterns:
 `(?d)desktop.ini
 (?d)Thumbs.db
@@ -13,15 +13,15 @@ export const IGNORE_BLOCKS = [
   },
   {
     id: "microsoft-office",
-    name: "Microsoft Office Temporary Files",
-    title: "//---Microsoft-Office---//",
+    name: "MS Office Temp Files",
+    title: "//---Microsoft-Office Temp Files---//",
     patterns:
 `(?d)~$*`,
   },
   {
     id: "macos",
     name: "macOS Metadata Files",
-    title: "//---macOS-Specific---//",
+    title: "//---macOS System Files---//",
     patterns:
 `// Finder and resource metadata
 (?d).DS_Store
@@ -43,7 +43,7 @@ export const IGNORE_BLOCKS = [
   {
     id: "linux",
     name: "Linux Temp Files",
-    title: "//---Linux-Specific---//",
+    title: "//---Linux Temp Files---//",
     patterns:
 `(?d)*~
 (?d).directory
@@ -52,7 +52,7 @@ export const IGNORE_BLOCKS = [
   {
     id: "qnap",
     name: "QNAP Temp Files",
-    title: "//---QNAP-Specific---//",
+    title: "//---QNAP Temp Files---//",
     patterns:
 `(?d).@__thumb
 (?d).AppleDB`,
@@ -60,14 +60,14 @@ export const IGNORE_BLOCKS = [
   {
     id: "synology",
     name: "Synology Temp Files",
-    title: "//---Synology-Specific---//",
+    title: "//---Synology Temp Files---//",
     patterns:
 `(?d)@eaDir`,
   },
   {
     id: "unity",
-    name: "Unity Generated Files",
-    title: "//---Unity-Generated---//",
+    name: "Unity-Generated Files",
+    title: "//---Unity-Generated Files---//",
     patterns:
 `(?d)[Ll]ibrary
 (?d)[Tt]emp
@@ -84,8 +84,8 @@ export const IGNORE_BLOCKS = [
   },
   {
     id: "godot",
-    name: "Godot Engine Generated Files",
-    title: "//---Godot-Engine-Generated---//",
+    name: "Godot Engine-Generated Files",
+    title: "//---Godot Engine-Generated Files---//",
     patterns:
 `(?d).godot
 // Godot 3.x generated data
@@ -96,8 +96,8 @@ export const IGNORE_BLOCKS = [
   },
   {
     id: "unrealengine",
-    name: "Unreal Engine Generated Files",
-    title: "//---Unreal-Engine-Generated---//",
+    name: "Unreal Engine-Generated Files",
+    title: "//---Unreal Engine-Generated Files---//",
     patterns:
 `(?d).vs
 (?d)[Dd]erived[Dd]ata[Cc]ache
@@ -111,7 +111,7 @@ export const IGNORE_BLOCKS = [
   },
   {
     id: "version-control",
-    name: "Version Control",
+    name: "Version Control (git, svn, etc.)",
     title: "//---Version-control internals---//",
     patterns:
 `// No (?d): repositories may contain unique, unpushed history.
@@ -128,7 +128,7 @@ _FOSSIL_`,
   {
     id: "python",
     name: "Python Temp Files",
-    title: "//---Python---//",
+    title: "//---Python Temp Files---//",
     patterns:
 `(?d)__pycache__
 (?d).pytest_cache
@@ -140,8 +140,8 @@ _FOSSIL_`,
   },
   {
     id: "web",
-    name: "JavaScript and web tooling",
-    title: "//---JavaScript and web---//",
+    name: "JavaScript and Web Tooling",
+    title: "//---JavaScript and Web Tooling---//",
     patterns:
 `(?d)node_modules
 (?d).pnpm-store
@@ -154,8 +154,8 @@ _FOSSIL_`,
   },
   {
     id: "node",
-    name: "Node and npm generated files",
-    title: "//---Node-Generated---//",
+    name: "Node and npm Generated Files",
+    title: "//---Node-Generated Files---//",
     patterns:
 `(?d)node_modules
 package-lock.json`,
@@ -172,7 +172,7 @@ package-lock.json`,
   {
     id: "meson",
     name: "Meson Temp Files",
-    title: "//---Meson-Specific---//",
+    title: "//---Meson Temp Files---//",
     patterns:
 `(?d)meson-private
 (?d)meson-logs
@@ -181,15 +181,15 @@ package-lock.json`,
   {
     id: "ninja",
     name: "Ninja Temp Files",
-    title: "//---Ninja-Specific---//",
+    title: "//---Ninja Temp Files---//",
     patterns:
 `(?d).ninja_deps
 (?d).ninja_log`,
   },
   {
     id: "pio",
-    name: "PlatformIO Generated Files",
-    title: "//---Ninja-Specific---//",
+    name: "PlatformIO-Generated Files",
+    title: "//---PIO-Generated Files---//",
     patterns:
 `(?d).pio
 (?d).pioenvs
@@ -198,14 +198,14 @@ package-lock.json`,
   {
     id: "vs",
     name: "VisualStudio Generated Files",
-    title: "//---VisualStudio-Specific---//",
+    title: "//---VisualStudio-Generated Files---//",
     patterns:
 `(?d).vs`,
   },
   {
     id: "compiler",
     name: "Compiler intermediates",
-    title: "//---Compiler-Generated-Files---//",
+    title: "//---Compiler-Generated Files---//",
     patterns:
 `(?d)(?i)*.{o,obj}
 (?d)*.class
