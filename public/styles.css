@@ -149,6 +149,10 @@ pre {
   color: var(--accent);
 }
 
+.github-label-narrow {
+  display: none;
+}
+
 main {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -707,6 +711,14 @@ h2 {
 }
 
 @media (max-width: 760px) {
+  .github-label-wide {
+    display: none;
+  }
+
+  .github-label-narrow {
+    display: inline;
+  }
+
   .builder {
     width: min(100% - 1.25rem, 920px);
     padding-top: 1.5rem;
